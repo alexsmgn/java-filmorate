@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,13 +21,13 @@ public class FilmControllerTests {
     @Autowired
     private Validator validator;
 
-    private final static Film film = new Film();
-    private final static String correctDescription = String.valueOf(200);
-    private final static String incorrectDescription = String.valueOf(201);
-    private final static LocalDate correctDate = LocalDate.of(1985, 12, 28);
+    private final Film film = new Film();
+    private final String correctDescription = String.valueOf(200);
+    private final String incorrectDescription = String.valueOf(201);
+    private final LocalDate correctDate = LocalDate.of(1985, 12, 28);
 
-    @BeforeAll
-    static void setFilm() {
+    @BeforeEach
+    void setFilm() {
         film.setName("film");
         film.setDescription(correctDescription);
         film.setReleaseDate(LocalDate.of(1985, 12, 28));

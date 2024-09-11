@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,10 +19,10 @@ public class UserControllerTests {
     @Autowired
     private Validator validator;
 
-    private static final User user = new User();
+    private final User user = new User();
 
-    @BeforeAll
-    static void setUser() {
+    @BeforeEach
+    void setUser() {
         user.setName("name");
         user.setEmail("user@mail.ru");
         user.setLogin("login");
