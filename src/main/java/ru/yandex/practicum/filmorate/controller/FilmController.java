@@ -48,7 +48,7 @@ public class FilmController {
         }
         if (film.getReleaseDate().isBefore(dayOfCreationCinema)) {
             log.error("неверная дата выходи фильма при добавлении");
-            throw new ValidationException("В этот день о кино еще не знали");
+            throw new ValidationException("Указана неверная дата");
         }
         if (film.getDuration().isNegative()) {
             log.error("При добавлении фильма длительность казана меньше 0");
@@ -77,7 +77,7 @@ public class FilmController {
             }
             if (newFilm.getReleaseDate().isBefore(dayOfCreationCinema)) {
                 log.error("Неверная дата выходи фильма при обновлении");
-                throw new ValidationException("В этот день о кино еще не знали");
+                throw new ValidationException("Указана неверная дата");
             }
             if (newFilm.getDuration().isNegative()) {
                 log.error("При обновлении фильма длительность казана меньше 0");
