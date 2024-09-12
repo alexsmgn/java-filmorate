@@ -1,8 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import exceptions.NotFoundException;
-import exceptions.ValidationException;
-import jakarta.validation.Valid;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.*;
@@ -35,51 +34,34 @@ public class UserController {
     }
 
     @PostMapping
-    public User addUser(@Valid @RequestBody User user) {
+    public User addUser(@RequestBody User user) {
         user.setId(getNextId());
-        if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            log.error("Поле Email не заполнено или пропущен символ @ при добавлении");
-            throw new ValidationException("Email пользователя не может быть пустым и должен содержать символ @");
-        }
-        if (user.getLogin().contains(" ") || user.getLogin().isBlank()) {
-            log.error("Поле Login не заполнено или содержит пробелы при добавлении");
-            throw new ValidationException("Login пользователя не может быть пустым и содержать пробелы");
-        }
+
+        userValidator(user);
+
         if (user.getName() == null) {
             user.setName(user.getLogin());
             log.info("Вместо имени пользователя подставлен Login");
         } else {
             user.setName(user.getName());
         }
-        if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.error("Введена неверная дата рождения при добавлении");
-            throw new ValidationException("Пользователь из будущего, что не возможно!");
-        }
+
         users.put(user.getId(), user);
         log.info("Пользователь добавлен");
         return user;
     }
 
     @PutMapping
-    public User updateUser(@Valid @RequestBody User newUser) {
+    public User updateUser(@RequestBody User newUser) {
         if (newUser.getId() == null) {
             log.error("Не введен id пользователя при изменении");
             throw new ValidationException("id пользователя должен быть указан");
         }
         if (users.containsKey(newUser.getId())) {
             User oldUser = users.get(newUser.getId());
-            if (newUser.getEmail() == null || newUser.getEmail().isBlank() || !newUser.getEmail().contains("@")) {
-                log.error("Поле Email не заполнено или пропущен символ @ при изменении");
-                throw new ValidationException("Email пользователя не может быть пустым и должен содержать символ @");
-            }
-            if (newUser.getLogin().contains(" ") || newUser.getLogin().isBlank()) {
-                log.error("Поле Login не заполнено или содержит пробелы при изменении");
-                throw new ValidationException("Login пользователя не может быть пустым и содержать пробелы");
-            }
-            if (newUser.getBirthday().isAfter(LocalDate.now())) {
-                log.error("Введена неверная дата рождения при изменении");
-                throw new ValidationException("Пользователь из будущего, что не возможно!");
-            }
+
+            userValidator(newUser);
+
             oldUser.setEmail(newUser.getEmail());
             oldUser.setLogin(newUser.getLogin());
             if (newUser.getName().isBlank()) {
@@ -91,5 +73,21 @@ public class UserController {
         }
         log.error("Пользователь с id {} не найден", newUser.getId());
         throw new NotFoundException("Пользователь с id =" + newUser.getId() + "не найден");
+    }
+
+    private void userValidator(@RequestBody User user) {
+
+        if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
+            log.error("Поле Email не заполнено или пропущен символ @ при добавлении");
+            throw new ValidationException("Email пользователя не может быть пустым и должен содержать символ @");
+        }
+        if (user.getLogin().contains(" ") || user.getLogin().isBlank()) {
+            log.error("Поле Login не заполнено или содержит пробелы при добавлении");
+            throw new ValidationException("Login пользователя не может быть пустым и содержать пробелы");
+        }
+        if (user.getBirthday().isAfter(LocalDate.now())) {
+            log.error("Введена неверная дата рождения при добавлении");
+            throw new ValidationException("Пользователь из будущего, что не возможно!");
+        }
     }
 }

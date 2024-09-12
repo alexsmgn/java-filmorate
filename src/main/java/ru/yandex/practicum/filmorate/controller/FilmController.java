@@ -1,8 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import exceptions.NotFoundException;
-import exceptions.ValidationException;
-import jakarta.validation.Valid;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +34,42 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film addFilm(@Valid @RequestBody Film film) {
+    public Film addFilm(@RequestBody Film film) {
         film.setId(getNextId());
+
+        filmValidator(film);
+
+        films.put(film.getId(), film);
+        log.info("Фильм {} успешно добавлен", film);
+        return film;
+    }
+
+    @PutMapping
+    public Film updateFilm(@RequestBody Film newFilm) {
+        if (newFilm.getId() == null) {
+            log.error("Не указан Id фильма");
+            throw new ValidationException("id фильма должен быть указан");
+        }
+        if (films.containsKey(newFilm.getId())) {
+            Film oldFilm = films.get(newFilm.getId());
+
+            filmValidator(newFilm);
+
+            oldFilm.setName(newFilm.getName());
+            log.info("Название фильма {} изменено", oldFilm);
+            oldFilm.setDescription(newFilm.getDescription());
+            log.info("Описание фильма {} изменено", oldFilm);
+            oldFilm.setReleaseDate(newFilm.getReleaseDate());
+            log.info("Дата выходи фильма {} изменена", oldFilm);
+            oldFilm.setDuration(newFilm.getDuration());
+            log.info("Длительность фильма {} изменена", oldFilm);
+            return oldFilm;
+        }
+        log.error("Фильм с id = {} не найден", newFilm.getId());
+        throw new NotFoundException("Фильм с id = " + newFilm.getId() + " не найден");
+    }
+
+    private void filmValidator(@RequestBody Film film) {
 
         if (film.getName() == null || film.getName().isBlank()) {
             log.error("Пустое имя фильма при добавлении");
@@ -54,46 +87,5 @@ public class FilmController {
             log.error("При добавлении фильма длительность указана меньше 0");
             throw new ValidationException("Длительность фильма не может быть меньше 0");
         }
-        films.put(film.getId(), film);
-        log.info("Фильм {} успешно добавлен", film);
-        return film;
-    }
-
-    @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film newFilm) {
-        if (newFilm.getId() == null) {
-            log.error("Не указан Id фильма");
-            throw new ValidationException("id фильма должен быть указан");
-        }
-        if (films.containsKey(newFilm.getId())) {
-            Film oldFilm = films.get(newFilm.getId());
-            if (newFilm.getName() == null || newFilm.getName().isBlank()) {
-                log.error("Пустое имя фильма при обновлении");
-                throw new ValidationException("Название фильма не может быть пустым");
-            }
-            if (newFilm.getDescription().length() > 200) {
-                log.error("Слишком длинное описание фильма при обновлении");
-                throw new ValidationException("Слишком длинное описание");
-            }
-            if (newFilm.getReleaseDate().isBefore(dayOfCreationCinema)) {
-                log.error("Неверная дата выходи фильма при обновлении");
-                throw new ValidationException("Указана неверная дата");
-            }
-            if (newFilm.getDuration() < 0) {
-                log.error("При обновлении фильма длительность указана меньше 0");
-                throw new ValidationException("Длительность фильма не может быть меньше 0");
-            }
-            oldFilm.setName(newFilm.getName());
-            log.info("Название фильма {} изменено", oldFilm);
-            oldFilm.setDescription(newFilm.getDescription());
-            log.info("Описание фильма {} изменено", oldFilm);
-            oldFilm.setReleaseDate(newFilm.getReleaseDate());
-            log.info("Дата выходи фильма {} изменена", oldFilm);
-            oldFilm.setDuration(newFilm.getDuration());
-            log.info("Длительность фильма {} изменена", oldFilm);
-            return oldFilm;
-        }
-        log.error("Фильм с id = {} не найден", newFilm.getId());
-        throw new NotFoundException("Фильм с id = " + newFilm.getId() + " не найден");
     }
 }
