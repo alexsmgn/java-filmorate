@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.model.Film;
 
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -31,7 +30,7 @@ public class FilmControllerTests {
         film.setName("film");
         film.setDescription(correctDescription);
         film.setReleaseDate(LocalDate.of(1985, 12, 28));
-        film.setDuration(Duration.ofMinutes(60));
+        film.setDuration(60);
     }
 
     @Test
@@ -77,7 +76,7 @@ public class FilmControllerTests {
         Set<ConstraintViolation<Film>> violation = validator.validate(film);
         assertTrue(violation.isEmpty());
 
-        film.setDuration(Duration.ofMinutes(-1));
+        film.setDuration(-1);
         violation = validator.validate(film);
         assertTrue(violation.isEmpty());
         assertEquals(0, violation.size());

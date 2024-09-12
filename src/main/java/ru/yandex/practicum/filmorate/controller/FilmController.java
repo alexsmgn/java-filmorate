@@ -50,8 +50,8 @@ public class FilmController {
             log.error("неверная дата выходи фильма при добавлении");
             throw new ValidationException("Указана неверная дата");
         }
-        if (film.getDuration().isNegative()) {
-            log.error("При добавлении фильма длительность казана меньше 0");
+        if (film.getDuration()<0) {
+            log.error("При добавлении фильма длительность указана меньше 0");
             throw new ValidationException("Длительность фильма не может быть меньше 0");
         }
         films.put(film.getId(), film);
@@ -79,8 +79,8 @@ public class FilmController {
                 log.error("Неверная дата выходи фильма при обновлении");
                 throw new ValidationException("Указана неверная дата");
             }
-            if (newFilm.getDuration().isNegative()) {
-                log.error("При обновлении фильма длительность казана меньше 0");
+            if (newFilm.getDuration()<0) {
+                log.error("При обновлении фильма длительность указана меньше 0");
                 throw new ValidationException("Длительность фильма не может быть меньше 0");
             }
             oldFilm.setName(newFilm.getName());
