@@ -1,91 +1,66 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
-import org.slf4j.Logger;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
-import java.time.LocalDate;
 import java.util.*;
 
 @RestController
 @RequestMapping("/films")
 public class FilmController {
 
-    private final Map<Long, Film> films = new HashMap<>();
-    private final LocalDate dayOfCreationCinema = LocalDate.of(1895, 12, 28);
-    private static final Logger log = LoggerFactory.getLogger(FilmController.class);
+    private final FilmService filmService;
+    private final InMemoryFilmStorage inMemoryFilmStorage;
 
-    private Long getNextId() {
-        long currentMaxId = films.keySet()
-                .stream()
-                .mapToLong(id -> id)
-                .max()
-                .orElse(0);
-        return ++currentMaxId;
+    @Autowired
+    public FilmController(FilmService filmService, InMemoryFilmStorage inMemoryFilmStorage) {
+        this.filmService = filmService;
+        this.inMemoryFilmStorage = inMemoryFilmStorage;
     }
 
     @GetMapping
     public Collection<Film> findAll() {
-        return films.values();
+        return filmService.findAll();
+    }
+
+    @GetMapping("/{filmId}")
+    public Film getFilmById(@PathVariable("filmId") long filmId) {
+        return filmService.getFilmById(filmId);
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Film addFilm(@RequestBody Film film) {
-        film.setId(getNextId());
-
-        filmValidator(film);
-
-        films.put(film.getId(), film);
-        log.info("Фильм {} успешно добавлен", film);
-        return film;
+        return inMemoryFilmStorage.addFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@RequestBody Film newFilm) {
-        if (newFilm.getId() == null) {
-            log.error("Не указан Id фильма");
-            throw new ValidationException("id фильма должен быть указан");
-        }
-        if (films.containsKey(newFilm.getId())) {
-            Film oldFilm = films.get(newFilm.getId());
-
-            filmValidator(newFilm);
-
-            oldFilm.setName(newFilm.getName());
-            log.info("Название фильма {} изменено", oldFilm);
-            oldFilm.setDescription(newFilm.getDescription());
-            log.info("Описание фильма {} изменено", oldFilm);
-            oldFilm.setReleaseDate(newFilm.getReleaseDate());
-            log.info("Дата выходи фильма {} изменена", oldFilm);
-            oldFilm.setDuration(newFilm.getDuration());
-            log.info("Длительность фильма {} изменена", oldFilm);
-            return oldFilm;
-        }
-        log.error("Фильм с id = {} не найден", newFilm.getId());
-        throw new NotFoundException("Фильм с id = " + newFilm.getId() + " не найден");
+        return inMemoryFilmStorage.updateFilm(newFilm);
     }
 
-    private void filmValidator(@RequestBody Film film) {
+    @DeleteMapping
+    public void deleteFilm(@RequestBody long id) {
+        inMemoryFilmStorage.deleteFilm(id);
+    }
 
-        if (film.getName() == null || film.getName().isBlank()) {
-            log.error("Пустое имя фильма при добавлении");
-            throw new ValidationException("Название фильма не может быть пустым");
-        }
-        if (film.getDescription().length() > 200) {
-            log.error("Слишком длинное описание фильма при добавлении");
-            throw new ValidationException("Слишком длинное описание");
-        }
-        if (film.getReleaseDate().isBefore(dayOfCreationCinema)) {
-            log.error("неверная дата выходи фильма при добавлении");
-            throw new ValidationException("Указана неверная дата");
-        }
-        if (film.getDuration() < 0) {
-            log.error("При добавлении фильма длительность указана меньше 0");
-            throw new ValidationException("Длительность фильма не может быть меньше 0");
-        }
+    @PutMapping("{filmId}/like/{userId}")
+    public void addLike(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) {
+        filmService.addLike(filmId, userId);
+    }
+
+    @DeleteMapping("{filmId}/like/{userId}")
+    public void delLike(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) {
+        filmService.delLike(filmId, userId);
+    }
+
+    @GetMapping("/popular")
+    public Collection<Film> getPopularFilm(@RequestParam(defaultValue = "10") int count) {
+        return filmService.getPopularFilms(count);
     }
 }
