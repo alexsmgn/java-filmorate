@@ -2,7 +2,11 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import ru.yandex.practicum.filmorate.controller.ErrorResponse;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
@@ -58,5 +62,11 @@ public class FilmService {
                 .sorted((film1, film2) -> film2.getLikes().size() - film1.getLikes().size())
                 .limit(10)
                 .toList();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNotFountException(final NotFoundException e) {
+        return new ErrorResponse("Ошибка", e.getMessage());
     }
 }

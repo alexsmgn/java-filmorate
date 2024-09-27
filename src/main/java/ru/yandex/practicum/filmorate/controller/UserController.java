@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public User updateUser(@RequestBody User newUser) {
         return inMemoryUserStorage.updateUser(newUser);
     }
@@ -50,19 +50,19 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/friends/{friendId}")
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public void addFriend(@PathVariable("userId") Long userId, @PathVariable("friendId") Long friendId) {
         userService.addFriend(userId, friendId);
     }
 
     @GetMapping("{userId}/friends")
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public Collection<User> getFriends(@PathVariable("userId") Long userId) {
         return userService.getFriends(userId);
     }
 
     @DeleteMapping("{userId}/friends/{friendId}")
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public void deleteFriend(@PathVariable("userId") Long userId, @PathVariable("friendId") Long friendId) {
         userService.delFriend(userId, friendId);
     }
