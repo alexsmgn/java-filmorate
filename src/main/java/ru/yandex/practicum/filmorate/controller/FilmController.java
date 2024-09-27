@@ -40,6 +40,7 @@ public class FilmController {
     }
 
     @PutMapping
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public Film updateFilm(@RequestBody Film newFilm) {
         return inMemoryFilmStorage.updateFilm(newFilm);
     }
@@ -50,11 +51,13 @@ public class FilmController {
     }
 
     @PutMapping("{filmId}/like/{userId}")
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public void addLike(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) {
         filmService.addLike(filmId, userId);
     }
 
     @DeleteMapping("{filmId}/like/{userId}")
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public void delLike(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) {
         filmService.delLike(filmId, userId);
     }
