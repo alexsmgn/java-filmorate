@@ -70,6 +70,24 @@ public class UserService {
         return userFriends;
     }
 
+    public Collection<User> getCommonFriends(long user1Id, long user2Id) {
+        List<User> commonFriends = new ArrayList<>();
+        User user1 = getUserById(user1Id);
+        User user2 = getUserById(user2Id);
+        if (user1.getFriends().contains(user2.getId())) {
+            for (long id : user1.getFriends()) {
+                if (user2.getFriends().contains(id)) {
+                    commonFriends.add(inMemoryUserStorage.users.get(id));
+                } else {
+                    throw new NotFoundException("Нет общих друзей");
+                }
+            }
+        } else {
+            throw new ValidationException("Позователи не являются друзьями");
+        }
+        return commonFriends;
+    }
+
     public void delFriend(long userId, long friendId) {
         if (!inMemoryUserStorage.users.containsKey(userId)) {
             throw new NotFoundException("Пользователь не найден");

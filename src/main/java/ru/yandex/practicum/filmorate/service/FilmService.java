@@ -52,6 +52,9 @@ public class FilmService {
         if (!inMemoryUserStorage.users.containsKey(userId)) {
             throw new NotFoundException("Пользователь не найден");
         }
+        if (!inMemoryFilmStorage.films.containsKey(filmId)) {
+            throw new NotFoundException("Фильм не найден");
+        }
         Film film = inMemoryFilmStorage.films.get(filmId);
         film.getLikes().remove(userId);
         log.info("У фильма с id {} удален лайк пользователя с id {}", filmId, userId);
