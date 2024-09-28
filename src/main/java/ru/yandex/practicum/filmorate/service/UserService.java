@@ -77,9 +77,7 @@ public class UserService {
         if (user1.getFriends().contains(user2.getId())) {
             for (long id : user1.getFriends()) {
                 if (user2.getFriends().contains(id)) {
-                    commonFriends.add(inMemoryUserStorage.users.get(id));
-                } else {
-                    throw new NotFoundException("Нет общих друзей");
+                    commonFriends.add(getUserById(id));
                 }
             }
         } else {
