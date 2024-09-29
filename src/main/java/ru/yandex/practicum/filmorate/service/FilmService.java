@@ -12,7 +12,7 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class FilmService extends InMemoryFilmStorage{
+public class FilmService extends InMemoryFilmStorage {
 
     private final InMemoryFilmStorage inMemoryFilmStorage;
     private final InMemoryUserStorage inMemoryUserStorage;
