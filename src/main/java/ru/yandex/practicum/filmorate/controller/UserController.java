@@ -14,12 +14,10 @@ import java.util.Collection;
 public class UserController {
 
     private final UserService userService;
-    private final InMemoryUserStorage inMemoryUserStorage;
 
     @Autowired
     public UserController(UserService userService, InMemoryUserStorage inMemoryUserStorage) {
         this.userService = userService;
-        this.inMemoryUserStorage = inMemoryUserStorage;
     }
 
     @GetMapping
@@ -35,18 +33,18 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User addUser(@RequestBody User user) {
-        return inMemoryUserStorage.addUser(user);
+        return userService.addUser(user);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public User updateUser(@RequestBody User newUser) {
-        return inMemoryUserStorage.updateUser(newUser);
+        return userService.updateUser(newUser);
     }
 
     @DeleteMapping
     public void deleteUser(@RequestBody Long id) {
-        inMemoryUserStorage.deleteUser(id);
+        userService.deleteUser(id);
     }
 
     @PutMapping("/{userId}/friends/{friendId}")
