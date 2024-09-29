@@ -11,7 +11,7 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class UserService extends InMemoryUserStorage {
+public class UserService {
 
     private final InMemoryUserStorage inMemoryUserStorage;
 
@@ -71,5 +71,17 @@ public class UserService extends InMemoryUserStorage {
         user.getFriends().remove(friendId);
         friend.getFriends().remove(userId);
         log.info("Пользователи {} и {} больше не друзья", userId, friendId);
+    }
+
+    public User addUser(User user) {
+        return inMemoryUserStorage.addUser(user);
+    }
+
+    public User updateUser(User newUser) {
+        return inMemoryUserStorage.updateUser(newUser);
+    }
+
+    public void deleteUser(long id) {
+        inMemoryUserStorage.deleteUser(id);
     }
 }

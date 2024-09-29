@@ -12,7 +12,7 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class FilmService extends InMemoryFilmStorage {
+public class FilmService {
 
     private final InMemoryFilmStorage inMemoryFilmStorage;
     private final InMemoryUserStorage inMemoryUserStorage;
@@ -61,5 +61,17 @@ public class FilmService extends InMemoryFilmStorage {
                 .sorted((film1, film2) -> film2.getLikes().size() - film1.getLikes().size())
                 .limit(count)
                 .toList();
+    }
+
+    public Film addFilm(Film film) {
+        return inMemoryFilmStorage.addFilm(film);
+    }
+
+    public Film updateFilm(Film newFilm) {
+        return inMemoryFilmStorage.updateFilm(newFilm);
+    }
+
+    public void deleteFilm(long id) {
+        inMemoryFilmStorage.deleteFilm(id);
     }
 }
