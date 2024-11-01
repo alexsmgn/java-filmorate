@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -16,13 +16,13 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService, InMemoryUserStorage inMemoryUserStorage) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping
-    public Collection<User> findAll() {
-        return userService.findAll();
+    public List<User> getUsers() {
+        return userService.getUsers();
     }
 
     @GetMapping("/{userId}")
@@ -38,13 +38,8 @@ public class UserController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public User updateUser(@RequestBody User newUser) {
-        return userService.updateUser(newUser);
-    }
-
-    @DeleteMapping
-    public void deleteUser(@RequestBody Long id) {
-        userService.deleteUser(id);
+    public User updateUser(@RequestBody User user) {
+        return userService.updateUser(user);
     }
 
     @PutMapping("/{userId}/friends/{friendId}")
