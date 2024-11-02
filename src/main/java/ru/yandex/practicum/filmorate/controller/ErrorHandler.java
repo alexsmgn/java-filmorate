@@ -15,25 +15,21 @@ import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 public class ErrorHandler {
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final ValidationException e) {
         return new ErrorResponse("Ошибка валидации", e.getMessage());
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFountException(final NotFoundException e) {
         return new ErrorResponse("Ошибка", e.getMessage());
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ErrorResponse handleConditionNotMetException(final ConditionsNotMetException e) {
         return new ErrorResponse("Ошибка", e.getMessage());
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleDuplicateDataException(final DuplicatedDataException e) {
         return new ErrorResponse("Ошибка", e.getMessage());
     }
