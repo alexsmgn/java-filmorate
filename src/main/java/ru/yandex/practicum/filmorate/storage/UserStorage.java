@@ -8,7 +8,7 @@ public interface UserStorage {
 
     User addUser(User user);
 
-    User updateUser(User user);
+    void updateUser(User user);
 
     List<User> getUsers();
 

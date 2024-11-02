@@ -59,7 +59,7 @@ public class User {
         friends.remove(id);
     }
 
-    public boolean isFriends(Long id) {
+    public boolean isFriend(Long id) {
         if (friends == null) {
             return false;
         } else {

@@ -46,8 +46,8 @@ public class UserService {
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
 
-        if (user.isFriends(friendId)) {
-            throw new ConditionsNotMetException("Пользователи уже являются друзьями");
+        if (user.isFriend(friendId)) {
+            throw new ConditionsNotMetException("Пользователи уже друзья");
         } else {
             user.addFriend(friendId);
             friend.addFriend(userId);
@@ -59,10 +59,10 @@ public class UserService {
 
     public List<User> getFriends(long userId) {
         List<User> userFriends = new ArrayList<>();
-        User user = userStorage.getUserById(userId);
+        User user = getUserById(userId);
 
         for (Long id : user.getFriends()) {
-            userFriends.add(userStorage.getUserById(id));
+            userFriends.add(getUserById(id));
         }
         return userFriends;
     }
@@ -81,15 +81,14 @@ public class UserService {
         return commonFriends;
     }
 
-    public User delFriend(long userId, long friendId) {
+    public void delFriend(long userId, long friendId) {
         User user = userStorage.getUserById(userId);
 
-        if (!user.isFriends(friendId)) {
+        if (!user.isFriend(friendId)) {
             throw new ConditionsNotMetException("Пользователя не друзья");
         } else {
-            user.removeFriend(friendId);
+
             userStorage.delFriend(userId, friendId);
         }
-        return user;
     }
 }

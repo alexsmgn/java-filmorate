@@ -36,12 +36,11 @@ public class UserRepository implements UserStorage {
     }
 
     @Override
-    public User updateUser(User user) {
+    public void updateUser(User user) {
         String query = "UPDATE users SET email = ?, login = ?, username = ?, birthday = ? WHERE user_id = ?";
 
         jdbcTemplate.update(query, user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), user.getId());
 
-        return user;
     }
 
     @Override
