@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.ConditionsNotMetException;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
@@ -69,7 +70,6 @@ public class UserService {
 
     public List<User> getCommonFriends(long user1Id, long user2Id) {
         List<User> commonFriends = new ArrayList<>();
-
         User user1 = userStorage.getUserById(user1Id);
         User user2 = userStorage.getUserById(user2Id);
 

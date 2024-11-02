@@ -27,7 +27,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ErrorResponse handleConditionNotMetException(final ConditionsNotMetException e) {
         return new ErrorResponse("Ошибка", e.getMessage());
     }
