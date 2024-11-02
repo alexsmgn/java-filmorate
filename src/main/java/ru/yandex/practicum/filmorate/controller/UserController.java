@@ -55,8 +55,8 @@ public class UserController {
 
     @DeleteMapping("{userId}/friends/{friendId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteFriend(@PathVariable Long userId, @PathVariable Long friendId) {
-        userService.delFriend(userId, friendId);
+    public User deleteFriend(@PathVariable Long userId, @PathVariable Long friendId) {
+        return userService.delFriend(userId, friendId);
     }
 
     @GetMapping("{user1Id}/friends/common/{user2Id}")

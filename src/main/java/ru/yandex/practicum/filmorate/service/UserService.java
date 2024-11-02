@@ -81,14 +81,16 @@ public class UserService {
         return commonFriends;
     }
 
-    public void delFriend(long userId, long friendId) {
+    public User delFriend(Long userId, Long friendId) {
         User user = userStorage.getUserById(userId);
 
         if (!user.isFriend(friendId)) {
-            throw new ConditionsNotMetException("Пользователя не друзья");
+            throw new ConditionsNotMetException("Пользователи не друзья");
         } else {
-
+            user.removeFriend(friendId);
             userStorage.delFriend(userId, friendId);
+
+            return user;
         }
     }
 }
