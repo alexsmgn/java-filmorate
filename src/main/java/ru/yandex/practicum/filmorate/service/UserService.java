@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.ConditionsNotMetException;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
@@ -47,7 +47,7 @@ public class UserService {
         User friend = userStorage.getUserById(friendId);
 
         if (user.isFriend(friendId)) {
-            throw new ConditionsNotMetException("Пользователи уже друзья");
+            throw new NotFoundException("Пользователи уже друзья");
         } else {
             user.addFriend(friendId);
             friend.addFriend(userId);
@@ -84,7 +84,7 @@ public class UserService {
         User user = userStorage.getUserById(userId);
 
         if (!user.isFriend(friendId)) {
-            throw new ConditionsNotMetException("Пользователи не друзья");
+            throw new NotFoundException("Пользователи не друзья");
         } else {
             user.removeFriend(friendId);
             userStorage.delFriend(userId, friendId);

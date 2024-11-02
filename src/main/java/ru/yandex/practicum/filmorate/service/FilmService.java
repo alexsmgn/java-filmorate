@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.ConditionsNotMetException;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Likes;
@@ -70,7 +70,7 @@ public class FilmService {
         userStorage.getUserById(userId);
 
         if (film.isLiked(userId)) {
-            throw new ConditionsNotMetException("Пользователь с id " + userId + " уже лайкнул этот фильм");
+            throw new NotFoundException("Пользователь с id " + userId + " уже лайкнул этот фильм");
         } else {
             filmStorage.like(id, userId);
         }
@@ -83,7 +83,7 @@ public class FilmService {
         if (film.isLiked(userId)) {
             filmStorage.deleteLike(id, userId);
         } else {
-            throw new ConditionsNotMetException("Пользователь с id " + userId + " не лайкал этот фильм");
+            throw new NotFoundException("Пользователь с id " + userId + " не лайкал этот фильм");
         }
     }
 
