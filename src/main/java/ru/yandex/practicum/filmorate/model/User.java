@@ -1,12 +1,13 @@
 package ru.yandex.practicum.filmorate.model;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -15,13 +16,14 @@ import java.util.*;
 @Slf4j
 public class User {
     private Long id;
-    @Email(message = "некорректный email")
+    @Email
     @NotBlank
     private String email;
-    @NotBlank(message = "некорректный login")
+    @NotBlank
+    @Pattern(regexp = "^\\S+$")
     private String login;
     private String name;
-    @Past(message = "дата рождения не может быть из будущего")
+    @Past
     private LocalDate birthday;
     private Set<Long> friends = new HashSet<>();
 
@@ -41,15 +43,6 @@ public class User {
         values.put("birthday", birthday);
 
         return values;
-    }
-
-    public User updateUser(User user) {
-        this.setEmail(user.getEmail());
-        this.setLogin(user.getLogin());
-        this.setName(user.getName());
-        this.setBirthday(user.getBirthday());
-
-        return this;
     }
 
     public void addFriend(Long id) {

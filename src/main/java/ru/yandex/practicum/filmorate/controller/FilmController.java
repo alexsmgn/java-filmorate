@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
@@ -26,13 +27,13 @@ public class FilmController {
     }
 
     @GetMapping("/{filmId}")
-    public Film getFilmById(@PathVariable("filmId") long filmId) {
+    public Film getFilmById(@PathVariable long filmId) {
         return filmService.getFilmById(filmId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film addFilm(@RequestBody Film film) {
+    public Film addFilm(@Valid @RequestBody Film film) {
         return filmService.addFilm(film);
     }
 
@@ -44,13 +45,13 @@ public class FilmController {
 
     @PutMapping("{filmId}/like/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public void addLike(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) {
+    public void addLike(@PathVariable long filmId, @PathVariable long userId) {
         filmService.like(filmId, userId);
     }
 
     @DeleteMapping("{filmId}/like/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public void delLike(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) {
+    public void delLike(@PathVariable long filmId, @PathVariable long userId) {
         filmService.delLike(filmId, userId);
     }
 

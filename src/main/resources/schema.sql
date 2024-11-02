@@ -36,8 +36,7 @@ CREATE TABLE films (
     description VARCHAR(1000) NOT NULL,
     release_date DATE NOT NULL,
     duration INTEGER NOT NULL,
-    mpa INTEGER REFERENCES mpa(id),
-    rate INTEGER
+    mpa INTEGER REFERENCES mpa(id)
 );
 
 CREATE TABLE likes (

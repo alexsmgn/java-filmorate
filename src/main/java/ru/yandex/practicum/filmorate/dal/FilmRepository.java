@@ -42,11 +42,11 @@ public class FilmRepository implements FilmStorage {
 
     @Override
     public Film updateFilm(Film film) {
-        String query = "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, rate = ?" +
+        String query = "UPDATE films SET film_name = ?, description = ?, release_date = ?, duration = ?, " +
                 "mpa = ? WHERE film_id = ?";
 
         jdbcTemplate.update(query, film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(),
-                film.getRate(), film.getMpa().getId(), film.getId());
+                film.getMpa().getId(), film.getId());
 
         return film;
     }

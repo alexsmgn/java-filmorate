@@ -1,11 +1,12 @@
 package ru.yandex.practicum.filmorate.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,6 +21,8 @@ public class Film {
     private Long id;
     @NotBlank
     private String name;
+    @NotBlank
+    @Size(max = 200)
     private String description;
     private LocalDate releaseDate;
     @Positive
@@ -27,7 +30,6 @@ public class Film {
     private Mpa mpa;
     private Set<Genre> genres = new HashSet<>();
     private Set<Likes> likes = new HashSet<>();
-    private Integer rate;
 
     public Film(Long id, String name, String description, LocalDate releaseDate, Integer duration, Mpa mpa) {
         this.id = id;
