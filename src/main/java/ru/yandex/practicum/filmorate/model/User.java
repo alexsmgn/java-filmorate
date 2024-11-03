@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
-import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.*;
