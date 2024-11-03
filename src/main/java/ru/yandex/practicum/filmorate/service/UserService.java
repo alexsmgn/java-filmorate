@@ -83,12 +83,14 @@ public class UserService {
     public User delFriend(Long userId, Long friendId) {
         User user = userStorage.getUserById(userId);
 
-        try {
-            user.getFriends().remove(friendId);
-        } catch (NotFoundException e) {
+        if (getUserById(userId) != null) {
+            if (getUserById(friendId) != null) {
+                user.removeFriend(friendId);
+                userStorage.deleteFriend(userId, friendId);
+            }
+        } else {
             throw new NotFoundException("Пользователь не найден");
         }
-
         return user;
     }
 }

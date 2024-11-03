@@ -76,7 +76,7 @@ public class UserRepository implements UserStorage {
     }
 
     @Override
-    public void delFriend(Long userId, Long friendId) {
+    public void deleteFriend(Long userId, Long friendId) {
         String query = "DELETE FROM friends where user_id = ? AND friend_id = ?";
 
         jdbcTemplate.update(query, userId, friendId);
