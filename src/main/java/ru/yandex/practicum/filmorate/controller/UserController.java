@@ -57,6 +57,7 @@ public class UserController {
     }
 
     @GetMapping("{user1Id}/friends/common/{user2Id}")
+    @ResponseStatus(HttpStatus.OK)
     public Collection<User> getCommonFriends(@PathVariable long user1Id,
                                              @PathVariable long user2Id) {
         return userService.getCommonFriends(user1Id, user2Id);
