@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
+import ru.yandex.practicum.filmorate.validation.MinDate;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class Film {
     @NotBlank
     @Size(max = 200)
     private String description;
+    @MinDate
     private LocalDate releaseDate;
     @Positive
     private Integer duration;

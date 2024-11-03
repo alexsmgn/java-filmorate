@@ -36,31 +36,27 @@ public class UserController {
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK)
     public User updateUser(@Valid @RequestBody User user) {
         return userService.updateUser(user);
     }
 
     @PutMapping("/{userId}/friends/{friendId}")
-    @ResponseStatus(HttpStatus.OK)
     public void addFriend(@PathVariable Long userId, @PathVariable Long friendId) {
         userService.addFriend(userId, friendId);
     }
 
     @GetMapping("{userId}/friends")
-    @ResponseStatus(HttpStatus.OK)
     public Collection<User> getFriends(@PathVariable Long userId) {
         return userService.getFriends(userId);
     }
 
     @DeleteMapping("{userId}/friends/{friendId}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public User deleteFriend(@PathVariable Long userId, @PathVariable Long friendId) {
         return userService.delFriend(userId, friendId);
     }
 
     @GetMapping("{user1Id}/friends/common/{user2Id}")
-    @ResponseStatus(HttpStatus.OK)
     public Collection<User> getCommonFriends(@PathVariable long user1Id,
                                              @PathVariable long user2Id) {
         return userService.getCommonFriends(user1Id, user2Id);

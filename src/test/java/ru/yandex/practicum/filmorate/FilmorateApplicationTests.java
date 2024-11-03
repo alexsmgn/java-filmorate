@@ -49,7 +49,7 @@ class FilmorateApplicationTests {
     @Test
     public void testFindFilmById() {
         Film filmOne = new Film(1L, "name", "description", LocalDate.of(2000, 01,
-                01), 1000, new Mpa(1));
+                01), 1000, new Mpa(1, ""));
 
         filmStorage.addFilm(filmOne);
 

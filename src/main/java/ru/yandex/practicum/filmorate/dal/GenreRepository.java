@@ -13,10 +13,9 @@ import ru.yandex.practicum.filmorate.storage.GenreStorage;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 
 @Slf4j
 @Repository
@@ -32,19 +31,15 @@ public class GenreRepository implements GenreStorage {
     public Genre getGenreById(Integer id) {
         String query = "SELECT * FROM genre WHERE id = ?";
 
-        Genre genre = jdbcTemplate.query(query, new GenreRowMapper(), id).stream().findAny()
+        return jdbcTemplate.query(query, new GenreRowMapper(), id).stream().findAny()
                 .orElseThrow(() -> new NotFoundException("Жанр с id " + id + " не найден"));
-
-        return genre;
     }
 
     @Override
     public Set<Genre> getGenres() {
         String query = "SELECT * FROM genre";
 
-        Set<Genre> genres = jdbcTemplate.query(query, new GenreRowMapper()).stream().collect(Collectors.toSet());
-
-        return genres;
+        return new HashSet<>(jdbcTemplate.query(query, new GenreRowMapper()));
     }
 
     @Override
@@ -52,7 +47,7 @@ public class GenreRepository implements GenreStorage {
         String query = "with cte as (select id from film_genres where film_id = ?) " +
                 "select * from genre join cte on genre.id = cte.id ";
 
-        return jdbcTemplate.query(query, new GenreRowMapper(), id).stream().collect(Collectors.toSet());
+        return new HashSet<>(jdbcTemplate.query(query, new GenreRowMapper(), id));
     }
 
     @Override
