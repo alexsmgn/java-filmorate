@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,8 +10,7 @@ import java.util.Map;
 
 @Data
 @AllArgsConstructor
-@EqualsAndHashCode(of = {"id"})
-public class Genre {
+public class Genre implements Comparable<Genre>{
     private Integer id;
     private String name;
 
@@ -30,5 +28,10 @@ public class Genre {
         String name = rs.getString("name");
 
         return new Genre(id, name);
+    }
+
+    @Override
+    public int compareTo(Genre o) {
+        return this.getId() - o.getId();
     }
 }

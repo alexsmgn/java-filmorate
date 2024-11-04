@@ -22,6 +22,6 @@ public class GenreService {
     }
 
     public Stream<Genre> getGenres() {
-        return genreStorage.getGenres().stream();
+        return genreStorage.getGenres().stream().sorted(Genre::compareTo);
     }
 }
