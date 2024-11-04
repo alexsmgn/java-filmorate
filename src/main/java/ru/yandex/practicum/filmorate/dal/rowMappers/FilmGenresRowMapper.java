@@ -10,7 +10,7 @@ public class FilmGenresRowMapper implements RowMapper<FilmGenres> {
     @Override
     public FilmGenres mapRow(ResultSet rs, int rowNum) throws SQLException {
         Long filmId = rs.getLong("film_id");
-        Integer genreId = rs.getInt("genre_id");
+        Integer genreId = rs.getInt("id");
 
         return new FilmGenres(filmId, genreId);
     }

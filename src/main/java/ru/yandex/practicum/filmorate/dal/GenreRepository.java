@@ -52,7 +52,7 @@ public class GenreRepository implements GenreStorage {
 
     @Override
     public void setFilmGenres(Film film) {
-        String query = "INSERT INTO film_genres (film_id, genre_id)" +
+        String query = "INSERT INTO film_genres (film_id, id)" +
                 " values (?, ?)";
 
         List<Genre> genres = new ArrayList<>(film.getGenres());
