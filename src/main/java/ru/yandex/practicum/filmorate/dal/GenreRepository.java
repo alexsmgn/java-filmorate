@@ -44,7 +44,7 @@ public class GenreRepository implements GenreStorage {
 
     @Override
     public Set<Genre> getFilmGenres(Long id) {
-        String query = "with cte as (select genre_id from film_genres where film_id = ?) " +
+        String query = "with cte as (select id from film_genres where film_id = ?) " +
                 "select * from genre join cte on genre.id = cte.id ";
 
         return new HashSet<>(jdbcTemplate.query(query, new GenreRowMapper(), id));
