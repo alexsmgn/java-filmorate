@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.validation.MinDate;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @EqualsAndHashCode(of = {"id"})
@@ -31,8 +28,7 @@ public class Film {
     @Positive
     private Integer duration;
     private Mpa mpa;
-    private Set<Genre> genres = new HashSet<>();
-    @JsonIgnore
+    private LinkedHashSet<Genre> genres = new LinkedHashSet<>();
     private Set<Likes> likes = new HashSet<>();
 
     public Film(Long id, String name, String description, LocalDate releaseDate, Integer duration, Mpa mpa) {
