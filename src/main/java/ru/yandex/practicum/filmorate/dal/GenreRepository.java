@@ -12,10 +12,8 @@ import ru.yandex.practicum.filmorate.storage.GenreStorage;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -37,9 +35,10 @@ public class GenreRepository implements GenreStorage {
 
     @Override
     public Set<Genre> getGenres() {
-        String query = "SELECT * FROM genre";
+        String sql = "select * from genre";
 
-        return new HashSet<>(jdbcTemplate.query(query, new GenreRowMapper()));
+        Set<Genre> genres = jdbcTemplate.query(sql, new GenreRowMapper()).stream().collect(Collectors.toSet());
+        return genres;
     }
 
     @Override
