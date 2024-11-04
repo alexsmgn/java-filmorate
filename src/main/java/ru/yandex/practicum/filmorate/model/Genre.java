@@ -12,7 +12,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"id"})
-public class Genre implements Comparable<Genre> {
+public class Genre {
     private Integer id;
     private String name;
 
@@ -30,10 +30,5 @@ public class Genre implements Comparable<Genre> {
         String name = rs.getString("name");
 
         return new Genre(id, name);
-    }
-
-    @Override
-    public int compareTo(Genre o) {
-        return this.getId() - o.getId();
     }
 }
