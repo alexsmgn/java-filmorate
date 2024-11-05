@@ -37,6 +37,8 @@ public class FilmRepository implements FilmStorage {
 
         film.setId(filmId);
 
+        log.info("Запрос на добавление фильма {}", film);
+
         return film;
     }
 
@@ -48,6 +50,8 @@ public class FilmRepository implements FilmStorage {
         jdbcTemplate.update(query, film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(),
                 film.getMpa().getId(), film.getId());
 
+        log.info("Запрос на обновление данных фильма {}", film);
+
         return film;
     }
 
@@ -56,6 +60,8 @@ public class FilmRepository implements FilmStorage {
         String query = "SELECT f.*, m.name FROM films as f LEFT JOIN mpa as m on f.mpa = m.id";
 
         List<Film> films = jdbcTemplate.query(query, new FilmRowMapper());
+
+        log.info("Запрос списка всех фильмов");
 
         return films;
     }
@@ -67,12 +73,16 @@ public class FilmRepository implements FilmStorage {
         Film film = jdbcTemplate.query(query, new FilmRowMapper(), id).stream().findAny()
                 .orElseThrow(() -> new NotFoundException("Фильм с id " + id + " не найден"));
 
+        log.info("Запрос данных фильма с id:{}", id);
+
         return film;
     }
 
     @Override
     public void like(Long id, Long userId) {
         String query = "INSERT INTO likes (user_id, film_id) values (?, ?)";
+
+        log.info("Пользователь с id: {} лайкнул фильм с id: {}", userId, id);
 
         jdbcTemplate.update(query, userId, id);
 
@@ -90,6 +100,8 @@ public class FilmRepository implements FilmStorage {
         String query = "SELECT * FROM likes WHERE film_id = ?";
 
         Set<Likes> likes = new HashSet<>(jdbcTemplate.query(query, new LikesRowMapper(), filmId));
+
+        log.info("Запрос на получение лайков фильма с id {}", filmId);
 
         return likes;
     }

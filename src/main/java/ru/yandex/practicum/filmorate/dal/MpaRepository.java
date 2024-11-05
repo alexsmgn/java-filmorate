@@ -25,6 +25,8 @@ public class MpaRepository implements MpaStorage {
     public Mpa getMpaById(Integer id) {
         String query = "SELECT * FROM mpa WHERE id = ?";
 
+        log.info("Запрос на получение рейтинга с id {}", id);
+
         return jdbcTemplate.query(query, new MpaRowMapper(), id).stream().findAny()
                 .orElseThrow(() -> new NotFoundException("Mpa не найден"));
     }
@@ -32,6 +34,8 @@ public class MpaRepository implements MpaStorage {
     @Override
     public List<Mpa> getMpa() {
         String query = "SELECT * FROM mpa";
+
+        log.info("Запрос на получение списка рейтингов");
 
         return jdbcTemplate.query(query, new MpaRowMapper());
     }

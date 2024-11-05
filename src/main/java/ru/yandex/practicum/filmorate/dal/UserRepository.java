@@ -32,12 +32,16 @@ public class UserRepository implements UserStorage {
         Long userId = simpleJdbcInsert.executeAndReturnKey(user.toMap()).longValue();
         user.setId(userId);
 
+        log.info("Запрос на добавление пользователя {}", user);
+
         return user;
     }
 
     @Override
     public void updateUser(User user) {
         String query = "UPDATE users SET email = ?, login = ?, username = ?, birthday = ? WHERE user_id = ?";
+
+        log.info("Запрос на обновление пользователя {}", user);
 
         jdbcTemplate.update(query, user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), user.getId());
 
@@ -53,6 +57,8 @@ public class UserRepository implements UserStorage {
             this.getFriends(user);
         }
 
+        log.info("Запрос на получение всех пользователей");
+
         return users;
     }
 
@@ -65,12 +71,16 @@ public class UserRepository implements UserStorage {
 
         this.getFriends(user);
 
+        log.info("Запрос на получение пользователя с id {}", id);
+
         return user;
     }
 
     @Override
     public void addFriend(Long userId, Long friendId) {
         String query = "INSERT INTO friends (user_id, friend_id) VALUES (?, ?)";
+
+        log.info("Запрос на добавление друга с id: {} к пользователю с id: {}", friendId, userId);
 
         jdbcTemplate.update(query, userId, friendId);
     }
@@ -79,11 +89,15 @@ public class UserRepository implements UserStorage {
     public void deleteFriend(Long userId, Long friendId) {
         String query = "DELETE FROM friends where user_id = ? AND friend_id = ?";
 
+        log.info("Запрос на удаление друга с id {} у пользователя с id {}", friendId, userId);
+
         jdbcTemplate.update(query, userId, friendId);
     }
 
     private void getFriends(User user) {
         String query = "SELECT friend_id FROM friends WHERE user_id = ?";
+
+        log.info("Запрос на получение списка друзей пользователя {}", user);
 
         List<Long> friends = jdbcTemplate.query(query, (rs, rowNum) -> rs.getLong("friend_id"), user.getId());
         user.addFriends(friends);

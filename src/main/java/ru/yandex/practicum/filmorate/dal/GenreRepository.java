@@ -29,6 +29,8 @@ public class GenreRepository implements GenreStorage {
     public Genre getGenreById(Integer id) {
         String query = "SELECT * FROM genre WHERE id = ?";
 
+        log.info("Запрос жанра с id: {}", id);
+
         return jdbcTemplate.query(query, new GenreRowMapper(), id).stream().findAny()
                 .orElseThrow(() -> new NotFoundException("Жанр с id " + id + " не найден"));
     }
@@ -38,6 +40,9 @@ public class GenreRepository implements GenreStorage {
         String sql = "select * from genre";
 
         Set<Genre> genres = jdbcTemplate.query(sql, new GenreRowMapper()).stream().collect(Collectors.toSet());
+
+        log.info("Запрос на получение списка жанров {}", genres);
+
         return genres;
     }
 
@@ -45,6 +50,8 @@ public class GenreRepository implements GenreStorage {
     public Set<Genre> getFilmGenres(Long id) {
         String query = "with cte as (select id from film_genres where film_id = ?) " +
                 "select * from genre join cte on genre.id = cte.id ";
+
+        log.info("Запрос на получение жанров фильма с id {}", id);
 
         return new HashSet<>(jdbcTemplate.query(query, new GenreRowMapper(), id));
     }
