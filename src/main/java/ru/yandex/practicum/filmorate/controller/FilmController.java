@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
@@ -21,41 +22,34 @@ public class FilmController {
     }
 
     @GetMapping
-    public Collection<Film> findAll() {
-        return filmService.findAll();
+    public Collection<Film> getFilms() {
+        return filmService.getFilms();
     }
 
     @GetMapping("/{filmId}")
-    public Film getFilmById(@PathVariable("filmId") long filmId) {
+    public Film getFilmById(@PathVariable long filmId) {
         return filmService.getFilmById(filmId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film addFilm(@RequestBody Film film) {
+    public Film addFilm(@Valid @RequestBody Film film) {
         return filmService.addFilm(film);
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Film updateFilm(@RequestBody Film newFilm) {
-        return filmService.updateFilm(newFilm);
-    }
-
-    @DeleteMapping
-    public void deleteFilm(@RequestBody long id) {
-        filmService.deleteFilm(id);
+    public Film updateFilm(@RequestBody Film film) {
+        return filmService.update(film);
     }
 
     @PutMapping("{filmId}/like/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void addLike(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) {
-        filmService.addLike(filmId, userId);
+    public void addLike(@PathVariable long filmId, @PathVariable long userId) {
+        filmService.like(filmId, userId);
     }
 
     @DeleteMapping("{filmId}/like/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void delLike(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delLike(@PathVariable long filmId, @PathVariable long userId) {
         filmService.delLike(filmId, userId);
     }
 
